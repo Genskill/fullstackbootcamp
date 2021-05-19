@@ -32,8 +32,9 @@ def main():
         print (f"Downloading {i}")
         lyrics = get_lyrics(i)
         fname = get_filename(i)
-        with open(fname, "w") as f:
-            f.write(lyrics)
+        f = open(fname, "w")
+        f.write(lyrics)
+        f.close()
 
 
 main()
