@@ -15,3 +15,9 @@ we want pieces from that, we have to break down the header into
 specific bytes and interpret that. 
 
 For more details, refer to the wikipedia article on binary files at https://en.wikipedia.org/wiki/Binary_file
+
+# Extra instructions for hangman. 
+You will probably need the word list to run this program. You can get
+that by running
+
+              sudo apt-get install wamerican
