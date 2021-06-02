@@ -9,7 +9,7 @@ CREATE TABLE character (
        name text NOT NULL,
        gender varchar(1),
        nickname text,
-       aff_id integer references(affiliation.id) -- foreign key
+       aff_id integer references affiliation(id)
 );
 
 -- Insert data
@@ -29,15 +29,15 @@ select name from character;
 
 create table affiliation (
        id integer primary key,
-       name text not null,
+       name text unique not null,
        location text not null
 );
 
-insert into affiliation(name, location) values ("Stark", "Winterfell");
+
 insert into affiliation(name, location) values ("Lannister", "Kings Landing");
 insert into affiliation(name, location) values ("Nights Watch", "Wall");
 insert into affiliation(name, location) values ("Targaryen", "Dragonstone");
-
+insert into affiliation(name, location) values ("Stark", "Winterfell");
 
 select c.name, c.gender, a.name  from character c, affiliation a where c.aff_id = a.id and a.location = "Winterfell";
 
