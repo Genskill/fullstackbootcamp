@@ -4,8 +4,6 @@ import psycopg2
 
 import sys
 
-
-
 def fetch_jobs():
     url = "https://www.naukri.com/jobapi/v3/search?noOfResults=20&urlType=search_by_key_loc&searchType=adv&keyword=python&location=bangalore&k=python&l=bangalore&seoKey=python-jobs-in-bangalore&src=jobsearchDesk&latLong="
     headers={"appid" : "109",
