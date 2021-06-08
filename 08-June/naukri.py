@@ -15,16 +15,21 @@ def fetch_jobs():
     return data['jobDetails']
 
 def insert_jobs(jobs):
-    # title   
-    # jobId   
-    # companyName   
     # x tagsAndSkills   
     # x placeholders   
-    # jdURL   
-    # jobDescription   
+    dbconn = psycopg2.connect("dbname=naukri")
+    cursor = dbconn.cursor()
     for i in jobs:
-        soup = bs4.BeautifulSoup(i['jobDescription'])
-        f = open(str(jobid)+".txt", "w")
+        title = i['title']
+        job_id = i['jobId']
+        company_name = i['companyName']
+        jd_url = i['jdURL']
+        soup = bs4.BeautifulSoup(i['jobDescription'], features="html.parser")
+        jd = str(soup.text)
+        cursor.execute("""INSERT INTO
+        openings (title, job_id, company_name, jd_url, jd_text) 
+        VALUES (%s, %s, %s, %s, %s)""",(title, job_id, company_name, jd_url, jd))
+    dbconn.commit()
 
 def create_db():
     dbconn = psycopg2.connect("dbname=naukri")
