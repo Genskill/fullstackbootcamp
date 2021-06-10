@@ -1,53 +1,62 @@
 import psycopg2
 from flask import Flask, request
 
+
 app = Flask("Job site")
 
 items = ["python", "perl", "ruby"]
 
+dbconn = psycopg2.connect("dbname=naukri")
+
+@app.route("/") 
+def index():
+    cursor = dbconn.cursor()
+    cursor.execute("select count(*) from openings")
+    njobs = cursor.fetchall()[0][0]
+    
+    return f"""
+    <html>
+    <head>
+    <title> Jobs page </title>
+    </head>
+
+    <body>
+    <h1>Welcome to the jobs page</h1>
+    There are currently <a href="/jobs">{njobs}</a> jobs
+    </body>
+    </html>
+    """
 
 
-@app.route("/test")
-def testing():
-    return """
-<html>
-  <head>
-    <title> Welcome to my website </title>
-  </head>
-
-
-  <body>
-    <h1> Introduction </h1>
-    My name is Noufal Ibrahim. 
-
-    <h1> Stuff I like </h1>
-    Here are some things that I enjoy doing. 
-    <ol>
-      <li> Programming </li>
-      <li> Reading </li>
-      <li> Sleeping </li>
-      <li> Calligraphy </li>
-      <li> Martial arts </li>
-    </ol>
-
-    <h1> Contact </h1>
-    Thanks for visiting. 
-    Follow me on twitter at
-    <a href="https://twitter.com/noufalibrahim">@noufalibrahim</a>.
-  </body>
-</html>
-"""
-
-@app.route("/") # decorator
-def hello():
-    dbconn = psycopg2.connect("dbname=naukri")
+@app.route("/jobs") # decorator
+def jobs():
     cursor = dbconn.cursor()
     cursor.execute("select title, company_name, jd_text from openings")
     ret = []
+
+
     for title, company_name, jd in cursor.fetchall():
-        item = f"<b>{title}</b> :: {company_name} <br/> {jd}"
+        item = f"<li>{title} :: {company_name} <br/> {jd}</li>"
         ret.append(item)
-    l = "<hr/>".join(ret)
+    jobs = "".join(ret)
+
+    return f"""
+    <html>
+    <head>
+    <title> Jobs page </title>
+    </head>
+
+    <body>
+    <h1>Welcome to the jobs page</h1>
+    <ol>
+    {jobs}
+    </ol>
+    </body>
+    </html>
+    """
+
+
+
     return f"""List of jobs is:
 
     {l}"""
