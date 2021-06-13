@@ -1,13 +1,24 @@
 import psycopg2
 from flask import Flask, request
-from flask import render_template
+from flask import render_template, jsonify
 
+
+name = "default"
 
 app = Flask("Job site")
 
 items = ["python", "perl", "ruby"]
 
 dbconn = psycopg2.connect("dbname=naukri")
+
+@app.route("/api")
+def api():
+    print(request.headers)
+    if request.headers.get("appId") != "109":
+        return jsonify({"Error" : "Need appId to work"})
+    else:
+        x = {"name" : name, "language" : "python"}
+        return jsonify(x)
 
 @app.route("/") 
 def index():
@@ -26,4 +37,6 @@ def jobs():
 
 
 if __name__ == "__main__":
+    import sys
+    name = sys.argv[1]
     app.run(debug=True)
