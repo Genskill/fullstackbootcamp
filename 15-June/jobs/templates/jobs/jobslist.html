@@ -1,17 +1,8 @@
-<html>
-  <head>
-    <title>Jobs page</title>
-  </head>
-  <body>
-    <h1> Welcome to the jobs page </h1>
+{% extends "base.html" %}
+{%block body%}
     <ol>
       {% for title, company_name, jd in jobs%}
-      <li>
-        {{title}} :: {{company_name}} 
-        <br/>
-        {{jd}}
-      </li>
+      <li>{{title}} :: {{company_name}} </li>
       {% endfor %}
     </ol>
-  </body>
-</html>
+{%endblock%}

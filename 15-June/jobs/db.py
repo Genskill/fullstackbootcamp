@@ -1,5 +1,6 @@
 import click
 from flask import current_app, g
+import psycopg2
 
 def get_db():
     if 'db' not in g:
