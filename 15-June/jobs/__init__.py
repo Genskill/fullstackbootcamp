@@ -60,5 +60,8 @@ def create_app():
                      # hook to close database connections when we're
                      # done.
 
+    from . import crawler
+    crawler.init_app(app)
+
     return app
     
