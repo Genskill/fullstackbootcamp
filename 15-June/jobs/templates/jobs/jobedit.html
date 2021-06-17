@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+
+{% block main %}
+    <h3>
+      {{company}} 
+    </h3>
+    <h4 class="text-muted">{{title}}</h4>
+    <small class="text-muted">({{crawled_on}})</small> 
+    <p>
+      <form action="{{url_for('jobs.edit_job', jid=jid)}}" method="POST">
+
+          <div class="mb-3">
+          <label class="form-label">Status</label><br/>
+          {%for id, name in statuses %}
+          <div class="form-check-inline">
+            <label for="jobdescription" class="form-label" for="{{id}}_{{name}}">{{name}}</label>
+          {%if status == name %}
+          <input id="{{id}}_{{name}}" type="radio" class="form-check-input" name="status" value="{{id}}" checked>
+          {% else %}
+          <input id="{{id}}_{{name}}" type="radio" class="form-check-input" name="status" value="{{id}}" >
+          {% endif %}
+          </div>
+          {%endfor%}
+          </div>
+
+          <div class="mb-3">
+          <label for="jobdescription" class="form-label">Job description</label>
+          <textarea rows="20" id="jobdescription" class="form-control"
+                    name="jd">
+            {{info}}
+          </textarea>
+          </div>
+
+          <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+
+      </div>
+      </form>
+    </p>
+
+{% endblock %}

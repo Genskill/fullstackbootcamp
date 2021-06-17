@@ -2,7 +2,7 @@
 # jobs related parts are going to be in this file.  We'll be using the
 # Blueprint just like a regular Flask app (with .route etc.)
 from flask import Blueprint
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 # g is an object that can store other objects throughout your
 # application. If there's some part of the code that needs to do
 # something and make that something available to all other parts of
@@ -30,7 +30,7 @@ def alljobs():
     conn = db.get_db() # Notice how we use the function from the db
                        # module to get the database connection.
     cursor = conn.cursor()
-    cursor.execute("select o.id, o.title, o.company_name, s.name from openings o, job_status s where s.id = o.status") # Query
+    cursor.execute("select o.id, o.title, o.company_name, s.name from openings o, job_status s where s.id = o.status order by s.name") # Query
     jobs = cursor.fetchall() # Get data
 
     # one extra query here to find out when the last crawl was done so that we can display it in the sidebar.
@@ -51,7 +51,7 @@ def jobdetail(jid):
     conn = db.get_db()
     cursor = conn.cursor()
     # We fetch additional information including the status of this job and the crawl date with this query
-    cursor.execute(f"select o.title, o.company_name, s.name, o.jd_text, o.crawled_on from openings o, job_status s where o.id = {jid} and s.id = o.status")
+    cursor.execute("select o.title, o.company_name, s.name, o.jd_text, o.crawled_on from openings o, job_status s where o.id = %s and s.id = o.status", (jid,))
     job = cursor.fetchone()
     if not job:
         # If the job is not found, we return the job details page
@@ -96,14 +96,28 @@ def edit_job(jid):
     conn = db.get_db()
     cursor = conn.cursor()
     # We fetch additional information including the status of this job and the crawl date with this query
-    cursor.execute(f"select o.title, o.company_name, s.name, o.jd_text, o.crawled_on from openings o, job_status s where o.id = {jid} and s.id = o.status")
+    cursor.execute("select o.title, o.company_name, s.name, o.jd_text, o.crawled_on from openings o, job_status s where o.id = %s and s.id = o.status", (jid,))
     job = cursor.fetchone()
     if not job:
         return render_template("jobs/jobdetails.html"), 404    
 
     if request.method == "GET":
-        return "Hi"
-
+        title, company_name, status, jd, crawled_on = job
+        cursor.execute("select id,name from job_status")
+        statuses = cursor.fetchall()
+        return render_template("jobs/jobedit.html", 
+                               jid = jid,
+                               info=jd,
+                               statuses = statuses,
+                               status = status,
+                               title = title, 
+                               crawled_on = crawled_on)
+    elif request.method == "POST":
+        status = request.form.get("status")
+        jd = request.form.get("jd")
+        cursor.execute("update openings set jd_text = %s, status=%s where id=%s", (jd, status, jid))
+        conn.commit()
+        return redirect(url_for("jobs.jobdetail", jid=jid), 302)
 
 
 
