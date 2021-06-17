@@ -50,15 +50,35 @@ def alljobs():
 def jobdetail(jid):
     conn = db.get_db()
     cursor = conn.cursor()
-    cursor.execute(f"select title, company_name, jd_text from openings where id = {jid}")
-    title, company, info = cursor.fetchone()
+    # We fetch additional information including the status of this job and the crawl date with this query
+    cursor.execute(f"select o.title, o.company_name, s.name, o.jd_text, o.crawled_on from openings o, job_status s where o.id = {jid} and s.id = o.status")
+    job = cursor.fetchone()
+    if not job:
+        # If the job is not found, we return the job details page
+        # without any parameters. Hence the {%if title%} test will
+        # fail and the {%else%} part will be executed. The 404
+        # indicates the HTTP status code. 404 stands for "page not
+        # found"
+        return render_template("jobs/jobdetails.html"), 404
+    title, company, status, info, crawled_on = job
     jid = int(jid)
     if jid == 1:
         prev = None
     else:
         prev = jid - 1
     nxt = jid + 1
-    return render_template("jobs/jobdetails.html", info = info, nxt=nxt, prev=prev, title = title, company=company)
+
+    # This dictionary is used to decide the colour and look of the
+    # various statuses. It maps from the name of the status in our
+    # database to the corresponding css class. This could have been in
+    # the database itself as well.
+    classes = {"crawled": "primary",
+               "applied" : "secondary",
+               "ignored" : "dark",
+               "selected" : "success",
+               "rejected" : "danger"}
+
+    return render_template("jobs/jobdetails.html", info = info, nxt=nxt, prev=prev, title = title, company=company, status=status, cls=classes[status], crawled_on=crawled_on)
 
 
 

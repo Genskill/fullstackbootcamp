@@ -1,14 +1,29 @@
-{% extends "base.html" %}
-{%block header%}
-    <h1> Welcome to the jobs info page </h1>
+{% extends "index.html" %}
+
+{% block main %}
+{%if title %}
+{%if prev %}
     <a class="btn btn-primary" href="/jobs/{{prev}}"> Previous </a>
+{%endif%}
+
     <a class="btn btn-primary" href="/jobs/"> ALL </a>
+
+{%if nxt %}
     <a class="btn btn-primary" href="/jobs/{{nxt}}"> Next </a>
-    <h2> {{title}} </h2>
-    <h2> {{company}} </h2>
-{%endblock%}
-{% block body %}
+{%endif%}    
+    <h3>
+      {{company}} 
+    </h3>
+    <h4 class="text-muted">{{title}}</h4>
+    <span class="badge bg-{{cls}}">{{status}}</span>
+    <small class="text-muted">({{crawled_on}})</small> 
     <p>
     {{info}}
     </p>
+{% else %}
+    <h1> Sorry. That's not a valid job id. </h1>
+    <p>
+    How about going <a href="{{url_for('jobs.alljobs')}}">back</a>?
+    </p>
+{% endif %}
 {% endblock %}
