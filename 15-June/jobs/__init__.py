@@ -9,7 +9,7 @@ from flask import Flask, render_template
 # create an app allows to manage this easily.
 def create_app():
     app = Flask("jobs")
-    
+
     # The config contains parameters (like db connection, perhaps some
     # secret keys and things like that. We're loading the config
     # directly from a mapping (dict like object). However, there are
