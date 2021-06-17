@@ -2,7 +2,7 @@
 # jobs related parts are going to be in this file.  We'll be using the
 # Blueprint just like a regular Flask app (with .route etc.)
 from flask import Blueprint
-from flask import render_template
+from flask import render_template, request
 # g is an object that can store other objects throughout your
 # application. If there's some part of the code that needs to do
 # something and make that something available to all other parts of
@@ -78,7 +78,34 @@ def jobdetail(jid):
                "selected" : "success",
                "rejected" : "danger"}
 
-    return render_template("jobs/jobdetails.html", info = info, nxt=nxt, prev=prev, title = title, company=company, status=status, cls=classes[status], crawled_on=crawled_on)
+    return render_template("jobs/jobdetails.html", 
+                           jid = jid,
+                           info = info, 
+                           nxt=nxt, 
+                           prev=prev, 
+                           title = title, 
+                           company=company, 
+                           status=status, 
+                           cls=classes[status], 
+                           crawled_on=crawled_on)
+
+
+
+@bp.route("/<jid>/edit", methods=["GET", "POST",])
+def edit_job(jid): 
+    conn = db.get_db()
+    cursor = conn.cursor()
+    # We fetch additional information including the status of this job and the crawl date with this query
+    cursor.execute(f"select o.title, o.company_name, s.name, o.jd_text, o.crawled_on from openings o, job_status s where o.id = {jid} and s.id = o.status")
+    job = cursor.fetchone()
+    if not job:
+        return render_template("jobs/jobdetails.html"), 404    
+
+    if request.method == "GET":
+        return "Hi"
+
+
+
 
 
 
