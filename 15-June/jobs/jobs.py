@@ -30,7 +30,7 @@ def alljobs():
     conn = db.get_db() # Notice how we use the function from the db
                        # module to get the database connection.
     cursor = conn.cursor()
-    cursor.execute("select id, title, company_name from openings") # Query
+    cursor.execute("select o.id, o.title, o.company_name, s.name from openings o, job_status s where s.id = o.status") # Query
     jobs = cursor.fetchall() # Get data
 
     # one extra query here to find out when the last crawl was done so that we can display it in the sidebar.
