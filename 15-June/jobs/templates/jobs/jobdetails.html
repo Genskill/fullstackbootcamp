@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{%block header%}
+    <h1> Welcome to the jobs info page </h1>
+    <a class="btn btn-primary" href="/jobs/{{prev}}"> Previous </a>
+    <a class="btn btn-primary" href="/jobs/"> ALL </a>
+    <a class="btn btn-primary" href="/jobs/{{nxt}}"> Next </a>
+    <h2> {{title}} </h2>
+    <h2> {{company}} </h2>
+{%endblock%}
+{% block body %}
+    <p>
+    {{info}}
+    </p>
+{% endblock %}

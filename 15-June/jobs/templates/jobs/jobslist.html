@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+    {%block body %}
+    <ol>
+      {% for id, title, company_name in jobs%}
+      <li>
+        <a href="/jobs/{{id}}" >{{company_name}}  :: {{title}}</a>
+      </li>
+      {% endfor %}
+    </ol>
+    {%endblock %}

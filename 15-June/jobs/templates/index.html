@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    {# This is a Jinja comment and won't be visible in the source of the page on the browser#}
+    <!-- This is an HTML comment and will be visible in the source of  the page in the browse -->
+
+
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet"/>
+    <!-- This above url will look like "/static/main.css" in your browser -->
+
+    {# The url_for function allows to to get a URL for a certain
+    resource or endpoint. We could hardcode this like this
+       <link href="/static/main.css" rel="stylesheet" />
+    but now, if we change our directory file static files to assets or
+    something like that, we have to change it here (and possibly many
+    other templates) as well. 
+
+    Using url_for will allow flask to generate the URL from the
+    settings so that we can change it in one place and it will be the
+    same everywhere. #}
+
+
+    
+    <title>Jobs</title>
+  </head>
+  <body>
+
+    <div class="container">
+      <h1 class="display-1">My interview information</h1>
+      <div class="row">
+        <div class="col-2 sidebar">
+          <h2> Stats </h2>
+          <ul>
+            <li> Last crawled on - 10/Aug/1980 </li>
+            <li> Total jobs in system - 25</li>
+          </ul>
+
+        </div>
+        <div class="col-8">
+          <h2>List of jobs in system</h2>
+          <ol>
+            <li>NOC Beltran</li>
+            <li>ANZUS ReMOB</li>
+            <li>USODE Pakistan</li>
+            <li>Downing Street</li>
+            <li>DDOS clones</li>
+            <li>SERT Pirates</li>
+            <li>Meth Lab</li>
+            <li>Sinaloa SHA</li>
+            <li>CATO Chemical</li>
+            <li>DITSA Agent</li>
+            <li>Ermes Bomb</li>
+            <li>Sinaloa SHA</li>
+            <li>CATO Chemical</li>
+            <li>DITSA Agent</li>
+            <li>Ermes Bomb</li>
+            <li>DITSA Agent</li>
+            <li>Ermes Bomb</li>
+            <li>Sinaloa SHA</li>
+            <li>CATO Chemical</li>
+            <li>DITSA Agent</li>
+            <li>Ermes Bomb</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+
+  </body>
+</html>
