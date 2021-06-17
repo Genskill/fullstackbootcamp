@@ -1,6 +1,5 @@
-{% extends "base.html" %}
-
-    {%block body %}
+{% extends "index.html" %}
+    {%block main %}
     <ol>
       {% for id, title, company_name in jobs%}
       <li>
@@ -9,3 +8,4 @@
       {% endfor %}
     </ol>
     {%endblock %}
+

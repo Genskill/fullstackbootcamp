@@ -32,7 +32,12 @@ def alljobs():
     cursor = conn.cursor()
     cursor.execute("select id, title, company_name from openings") # Query
     jobs = cursor.fetchall() # Get data
-    return render_template("jobs/jobslist.html", jobs = jobs) # Render the data using the jobs/jobslist template.
+
+    # one extra query here to find out when the last crawl was done so that we can display it in the sidebar.
+    cursor.execute("select crawled_on from crawl_status order by crawled_on desc limit 1");
+    crawl_date = cursor.fetchone()[0]
+
+    return render_template("jobs/jobslist.html", jobs = jobs, count=len(jobs), date=crawl_date) # Render the data using the jobs/jobslist template.
 
 # The <> inside the URL specifies variable part of the URL. If the URL
 # was /test/here, it will match only exactly /test/here. If you give

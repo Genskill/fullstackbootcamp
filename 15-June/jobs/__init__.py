@@ -42,6 +42,12 @@ def create_app():
     from . import jobs 
     app.register_blueprint(jobs.bp)
 
+    from . import db 
+    db.init_app(app) # This is where we're registering everything when
+                     # a new application is created. This will add the
+                     # commands we created to the command line and the
+                     # hook to close database connections when we're
+                     # done.
 
 
     # This is a small function to serve a random quote when we go the main page (/). Keeping it empty is ugly
@@ -51,14 +57,15 @@ def create_app():
                   ["The pessimist sees difficulty in every opportunity. The optimist sees opportunity in every difficulty.", "Winston Churchill"],
                   ["Don’t let yesterday take up too much of today.", "Will Rogers"]]
         quote, author = random.choice(quotes)
-        return render_template('index.html', quote=quote, author=author)
+        conn = db.get_db()
+        curs = conn.cursor()
+        curs.execute("select count(*) from openings")
+        count = curs.fetchone()[0]
+        curs.execute("select crawled_on from crawl_status order by crawled_on desc limit 1");
+        crawl_date = curs.fetchone()[0]
 
-    from . import db 
-    db.init_app(app) # This is where we're registering everything when
-                     # a new application is created. This will add the
-                     # commands we created to the command line and the
-                     # hook to close database connections when we're
-                     # done.
+        return render_template('index.html', quote=quote, author=author, count=count, date = crawl_date)
+
 
     from . import crawler
     crawler.init_app(app)

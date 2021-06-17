@@ -73,7 +73,6 @@ def init_db_command():
     click.echo('DB initialised') # This the click library API to print a message on the screen
 
 
-
 # All commands and other things need to be registered into the application. We write a function here that can be called inside __init__.py which will add the init_db_command to the CLI. If you run flask --help now, you will see the initidb command there. Also, we add a "hook" to automatically call close_db when the app finishes execution. This will make sure that database connections are closed when done.
 def init_app(app):
     app.teardown_appcontext(close_db)
