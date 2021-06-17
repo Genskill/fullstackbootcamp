@@ -38,9 +38,15 @@ def create_app():
     # blueprint we've created in there into the main application
     # thereby adding all the URLs defined inside jobs to the main app.
 
+    import random
+
     @app.route("/")
     def index():
-        return render_template('index.html')
+        quotes = [["The best way to get started is to quit talking and begin doing.", "Walt Disney"],
+                  ["The pessimist sees difficulty in every opportunity. The optimist sees opportunity in every difficulty.", "Winston Churchill"],
+                  ["Don’t let yesterday take up too much of today.", "Will Rogers"]]
+        quote, author = random.choice(quotes)
+        return render_template('index.html', quote=quote, author=author)
 
     from . import jobs 
     app.register_blueprint(jobs.bp)

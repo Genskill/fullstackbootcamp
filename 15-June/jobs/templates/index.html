@@ -25,8 +25,6 @@
     Using url_for will allow flask to generate the URL from the
     settings so that we can change it in one place and it will be the
     same everywhere. #}
-
-
     
     <title>Jobs</title>
   </head>
@@ -36,38 +34,29 @@
       <h1 class="display-1">My interview information</h1>
       <div class="row">
         <div class="col-2 sidebar">
+          {% block sidebar %}
           <h2> Stats </h2>
           <ul>
             <li> Last crawled on - 10/Aug/1980 </li>
             <li> Total jobs in system - 25</li>
           </ul>
+          {% endblock %}
 
         </div>
         <div class="col-8">
-          <h2>List of jobs in system</h2>
-          <ol>
-            <li>NOC Beltran</li>
-            <li>ANZUS ReMOB</li>
-            <li>USODE Pakistan</li>
-            <li>Downing Street</li>
-            <li>DDOS clones</li>
-            <li>SERT Pirates</li>
-            <li>Meth Lab</li>
-            <li>Sinaloa SHA</li>
-            <li>CATO Chemical</li>
-            <li>DITSA Agent</li>
-            <li>Ermes Bomb</li>
-            <li>Sinaloa SHA</li>
-            <li>CATO Chemical</li>
-            <li>DITSA Agent</li>
-            <li>Ermes Bomb</li>
-            <li>DITSA Agent</li>
-            <li>Ermes Bomb</li>
-            <li>Sinaloa SHA</li>
-            <li>CATO Chemical</li>
-            <li>DITSA Agent</li>
-            <li>Ermes Bomb</li>
-          </ol>
+          {% block main%}
+          <h2> Welcome! You've got this! </h2>
+          <div id="inspiration">
+          <figure class="text-center">
+            <blockquote class="blockquote">
+              <p>{{quote}}</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+              {{author}}
+            </figcaption>
+          </figure>
+          </div>
+          {% endblock %}
         </div>
       </div>
 
