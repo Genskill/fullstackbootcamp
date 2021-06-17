@@ -1,3 +1,4 @@
+import  random
 from flask import Flask, render_template
 
 # create_app is a function which will automatically called by the
@@ -38,8 +39,12 @@ def create_app():
     # blueprint we've created in there into the main application
     # thereby adding all the URLs defined inside jobs to the main app.
 
-    import random
+    from . import jobs 
+    app.register_blueprint(jobs.bp)
 
+
+
+    # This is a small function to serve a random quote when we go the main page (/). Keeping it empty is ugly
     @app.route("/")
     def index():
         quotes = [["The best way to get started is to quit talking and begin doing.", "Walt Disney"],
@@ -48,10 +53,12 @@ def create_app():
         quote, author = random.choice(quotes)
         return render_template('index.html', quote=quote, author=author)
 
-    from . import jobs 
-    app.register_blueprint(jobs.bp)
-
-    
+    from . import db 
+    db.init_app(app) # This is where we're registering everything when
+                     # a new application is created. This will add the
+                     # commands we created to the command line and the
+                     # hook to close database connections when we're
+                     # done.
 
     return app
     
