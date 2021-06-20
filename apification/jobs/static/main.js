@@ -23,6 +23,27 @@ class LikeButton extends React.Component {
 }
 
 
+class JobDetail extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {job : null}
+        
+        }
+    render() {
+        var details = this.state.job;
+        if (details) {
+            return(<div>
+                   More
+                   </div>)
+        } else {
+            return(<div>
+                   Greetings
+                   </div>)
+        }
+    }
+}
+
+
 class JobItem extends React.Component {
     fetchItem(e, job_id) {
         axios.get("/jobs/"+job_id,   {headers: {'Accepts': 'application/json'}})
@@ -69,23 +90,35 @@ class JobList extends React.Component {
     }
 }
 
+function JobInfo(props) {
+    var info = {jobs : []
+                current : null}
+    return (
+        <div>
+            <div className="col-3 sidebar">
+            <h2> Stats </h2>
+            <ul>
+            <li> Last crawled -  </li>
+            <li> Total jobs in system - </li>
+            </ul>
+            <JobList/>
+            </div>
 
-const domContainer = document.querySelector('#rdemo');
-ReactDOM.render(e(LikeButton), domContainer);
+            <div className="col-7">
+            <JobDetail/>
+            </div>
+            </div>
 
-
-const sd = document.querySelector("#joblist");
-ReactDOM.render(<JobList name="hello"/>, sd);
-
-
-
+    )}
 
 
 
+const cont = document.querySelector("#jobinfo");
+ReactDOM.render(<JobInfo/>, cont);
 
 
-
-
-
-
+// const sd = document.querySelector("#joblist");
+// ReactDOM.render(<JobList/>, sd);
+// const jd = document.querySelector("#jobdetail");
+// ReactDOM.render(<JobDetail/>, jd);
 

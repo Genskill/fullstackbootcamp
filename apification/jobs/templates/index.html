@@ -35,46 +35,7 @@
 
       <h1 class="display-1">My interview information</h1>
       <div class="row">
-        <div class="col-3 sidebar">
-          {% block sidebar %}
-          <h2> Stats </h2>
-          <ul>
-            <li> Last crawled - {{date}} </li>
-            <li> Total jobs in system - {{count}}</li>
-          </ul>
-
-          <div id="joblist">
-            Loading ...
-          </div>
-          {% endblock %}
-
-        </div>
-        <div class="col-7">
-          {% block main%}
-          <div class="card center" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title text-center">All my jobs</h5>
-              <p class="card-text">
-                <div id="inspiration">
-                  <figure class="text-center">
-                    <blockquote class="blockquote">
-                      <p>{{quote}}</p>
-                    </blockquote>
-                    <figcaption class="blockquote-footer">
-                      {{author}}
-                    </figcaption>
-                  </figure>
-                </div>
-              </p>
-              <a href="{{url_for('jobs.alljobs')}}"> All my jobs </a>
-            </div>
-          </div>          
-
-          <div id="rdemo">
-            
-          </div>
-
-          {% endblock %}
+        <div id="jobinfo">
         </div>
       </div>
 
