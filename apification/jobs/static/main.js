@@ -22,11 +22,35 @@ class LikeButton extends React.Component {
 }
 
 
+class JobItem extends React.Component {
+   render() {
+        return (<a href={"/jobs/" + this.props.id}>{this.props.name}</a>);
+    }
+}
+
+
+
 class JobList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { jobs : [{id: 1,
+                                name: "foo"
+                               },
+                               {id: 2,
+                                name: "bar"
+                               },
+                               {id: 3,
+                                name: "baz"
+                               }]
+                       }
+    }
     render() {
-            return (<div>
-                    {this.props.name}
-                    </div>);
+        var jobs = this.state.jobs;
+        return (<ol>
+                {jobs.map(function(item) {return <li key={item.id}> 
+                                          <JobItem id={item.id} name={item.name}/>
+                                          </li>})}
+                </ol>);
     }
 }
 
