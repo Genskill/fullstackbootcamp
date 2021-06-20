@@ -6,3 +6,7 @@ div#inspiration {
     border-top: 3px double #444;
     border-bottom: 3px double #444;
 }
+
+#joblist {
+    font-size: 10pt;
+    }

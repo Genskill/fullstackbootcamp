@@ -1,4 +1,5 @@
 'use strict';
+// const axios = require('axios');
 
 const e = React.createElement;
 
@@ -23,34 +24,48 @@ class LikeButton extends React.Component {
 
 
 class JobItem extends React.Component {
-   render() {
-        return (<a href={"/jobs/" + this.props.id}>{this.props.name}</a>);
+    fetchItem(e, job_id) {
+        axios.get("/jobs/"+job_id,   {headers: {'Accepts': 'application/json'}})
+        .then(function(resp) {
+                console.log(resp);
+        })
+        .catch(function(error) {
+            console.log(error);
+        })
+        e.preventDefault();
+    }
+
+    render() {
+        return (<a href={"/jobs/" + this.props.id} onClick={(e)=>this.fetchItem(e,this.props.id)}>{this.props.name}</a>);
     }
 }
-
 
 
 class JobList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { jobs : [{id: 1,
-                                name: "foo"
-                               },
-                               {id: 2,
-                                name: "bar"
-                               },
-                               {id: 3,
-                                name: "baz"
-                               }]
-                       }
-    }
+        this.state = {jobs : null};
+        axios.get("/jobs", {headers: {'Accepts': 'application/json'}})
+            .then((resp) =>  {
+                this.setState({jobs : resp.data});
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
+         }
     render() {
         var jobs = this.state.jobs;
-        return (<ol>
-                {jobs.map(function(item) {return <li key={item.id}> 
-                                          <JobItem id={item.id} name={item.name}/>
-                                          </li>})}
-                </ol>);
+        console.log("Running ");
+        if (jobs) {
+            return (<ol>
+                    {jobs.jobs.map(function(item) {
+                             return (<li key={item.id}> 
+                            <JobItem id={item.id} name={item.title}/>
+                            </li>)})}
+                    </ol>);
+            } else {
+                return (<span> Loading... </span>);
+            }
     }
 }
 

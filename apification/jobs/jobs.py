@@ -2,7 +2,7 @@
 # jobs related parts are going to be in this file.  We'll be using the
 # Blueprint just like a regular Flask app (with .route etc.)
 from flask import Blueprint
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 # g is an object that can store other objects throughout your
 # application. If there's some part of the code that needs to do
 # something and make that something available to all other parts of
@@ -37,7 +37,10 @@ def alljobs():
     cursor.execute("select crawled_on from crawl_status order by crawled_on desc limit 1");
     crawl_date = cursor.fetchone()[0]
 
-    return render_template("jobs/jobslist.html", jobs = jobs, count=len(jobs), date=crawl_date) # Render the data using the jobs/jobslist template.
+    if (request.accept_mimetypes.best == "application/json"):
+        return jsonify(dict(jobs = [dict(id = id, title=title) for id, title, _, _ in jobs]))
+    else:
+        return render_template("jobs/jobslist.html", jobs = jobs, count=len(jobs), date=crawl_date) # Render the data using the jobs/jobslist template.
 
 # The <> inside the URL specifies variable part of the URL. If the URL
 # was /test/here, it will match only exactly /test/here. If you give
@@ -59,7 +62,12 @@ def jobdetail(jid):
         # fail and the {%else%} part will be executed. The 404
         # indicates the HTTP status code. 404 stands for "page not
         # found"
-        return render_template("jobs/jobdetails.html"), 404
+        if (request.accept_mimetypes.best == "application/json"):
+            return jsonify({"error": f"No job with id {jid}"})
+        else:
+            return render_template("jobs/jobdetails.html"), 404
+
+
     title, company, status, info, crawled_on = job
     jid = int(jid)
     if jid == 1:
@@ -77,17 +85,25 @@ def jobdetail(jid):
                "ignored" : "dark",
                "selected" : "success",
                "rejected" : "danger"}
-
-    return render_template("jobs/jobdetails.html", 
-                           jid = jid,
-                           info = info, 
-                           nxt=nxt, 
-                           prev=prev, 
-                           title = title, 
-                           company=company, 
-                           status=status, 
-                           cls=classes[status], 
-                           crawled_on=crawled_on)
+    if (request.accept_mimetypes.best == "application/json"):
+        ret = dict(id = jid,
+                   jd = info,
+                   title = title,
+                   company = company,
+                   status = status,
+                   crawled_on = str(crawled_on))
+        return jsonify(ret)
+    else:
+        return render_template("jobs/jobdetails.html", 
+                               jid = jid,
+                               info = info, 
+                               nxt=nxt, 
+                               prev=prev, 
+                               title = title, 
+                               company=company, 
+                               status=status, 
+                               cls=classes[status], 
+                               crawled_on=crawled_on)
 
 
 
