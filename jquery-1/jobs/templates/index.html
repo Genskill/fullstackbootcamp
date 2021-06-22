@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    
+    {# This is a Jinja comment and won't be visible in the source of
+    the page on the browser #}
+    <!-- This is an HTML comment and will be visible in the source of  the page in the browse -->
+
+
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet"/>
+    <!-- This above url will look like "/static/main.css" in your browser -->
+
+    {# The url_for function allows to to get a URL for a certain
+    resource or endpoint. We could hardcode this like this
+    <link href="/static/main.css" rel="stylesheet" />
+    but now, if we change our directory file static files to assets or
+    something like that, we have to change it here (and possibly many
+    other templates) as well. 
+
+    Using url_for will allow flask to generate the URL from the
+    settings so that we can change it in one place and it will be the
+    same everywhere. #}
+    
+    <title>Jobs</title>
+  </head>
+  <body>
+
+
+
+    <div class="container">
+      <h1 class="display-1">My interview information</h1>
+      <div class="row">
+        <div class="col-2 sidebar">
+          {% block sidebar %}
+          <h2> Stats </h2>
+          <ul>
+            <li> Last crawled - {{date}} </li>
+            <li> Total jobs in system - {{count}}</li>
+          </ul>
+          {% endblock %}
+
+        </div>
+        <div class="col-3">
+          {% block main%}
+          <div class="card center" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title text-center">All my jobs</h5>
+              <p class="card-text">
+                <div id="inspiration">
+                  <figure class="text-center">
+                    <blockquote class="blockquote">
+                      <p>{{quote}}</p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer">
+                      {{author}}
+                    </figcaption>
+                  </figure>
+                </div>
+              </p>
+              <a href="{{url_for('jobs.alljobs')}}"> All my jobs </a>
+            </div>
+          </div>          
+          {% endblock %}
+        </div>
+          {% block details %}
+          <div id="details" class="col-5">
+          </div>
+          {% endblock %}
+      </div>
+    </div>
+
+  </body>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='main.js') }}"
+          type="text/javascript"></script>
+
+</html>

@@ -1,27 +1,4 @@
 'use strict';
-// const axios = require('axios');
-
-const e = React.createElement;
-
-class LikeButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { liked: false };
-  }
-
-  render() {
-    if (this.state.liked) {
-      return 'You liked this.';
-    }
-
-    return e(
-      'button',
-      { onClick: () => this.setState({ liked: true }) },
-      'Like'
-    );
-  }
-}
-
 
 class JobDetail extends React.Component {
     constructor(props) {
@@ -29,7 +6,6 @@ class JobDetail extends React.Component {
     }
     render() {
         var jobdetails = this.props.jobdetails;
-        console.log("Inside JobDetail", jobdetails);
         if (jobdetails) {
             return(<span> 
                    <h4 className="text-muted">{jobdetails.title}</h4>
@@ -45,8 +21,6 @@ class JobDetail extends React.Component {
 }
 
 
-
-
 class JobList extends React.Component {
     constructor(props) {
         super(props);
@@ -60,7 +34,6 @@ class JobList extends React.Component {
             })
          }
     handleClick(e, job_id, callback) {
-        console.log("Inside handleClick!");
         callback(job_id);
         e.preventDefault();
         }
@@ -94,7 +67,6 @@ class JobInfo extends React.Component {
         axios.get("/jobs/"+job_id, 
                   {headers: {'Accepts': 'application/json'}})
             .then((resp) =>  {
-                console.log("Response ", resp);
                 this.setState({jobs: jobs,
                                current : {title : resp.data.title,
                                           company : resp.data.company,
@@ -132,13 +104,9 @@ class JobInfo extends React.Component {
 }
 
 
-
 const cont = document.querySelector("#jobinfo");
 ReactDOM.render(<JobInfo/>, cont);
 
 
-// const sd = document.querySelector("#joblist");
-// ReactDOM.render(<JobList/>, sd);
-// const jd = document.querySelector("#jobdetail");
-// ReactDOM.render(<JobDetail/>, jd);
+
 

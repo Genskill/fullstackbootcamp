@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% block main %}
+{%if title %}
+{# FIXME: The following urls need to be fixed with url_for #}
+{%if prev %}
+    <a class="btn btn-primary" href="/jobs/{{prev}}"> Previous </a>
+{%endif%}
+
+    <a class="btn btn-primary" href="/jobs/"> ALL </a>
+
+{%if nxt %}
+    <a class="btn btn-primary" href="/jobs/{{nxt}}"> Next </a>
+{%endif%}    
+    <h3>
+      {{company}} 
+    </h3>
+    <h4 class="text-muted">{{title}}</h4>
+    <span class="badge bg-{{cls}}">{{status}}</span>
+    <small class="text-muted">({{crawled_on}})</small> 
+    <p>
+    {{info}}
+    </p>
+<p>
+  <a class="btn btn-primary" href="{{url_for('jobs.edit_job', jid=jid)}}">Edit this job</a>
+</p>
+{% else %}
+    <h1> Sorry. That's not a valid job id. </h1>
+    <p>
+    How about going <a href="{{url_for('jobs.alljobs')}}">back</a>?
+    </p>
+{% endif %}
+{% endblock %}
