@@ -25,41 +25,26 @@ class LikeButton extends React.Component {
 
 class JobDetail extends React.Component {
     constructor(props) {
-        super(props)
-        this.state = {job : null}
-        
-        }
+        super(props);
+    }
     render() {
-        var details = this.state.job;
-        if (details) {
-            return(<div>
-                   More
-                   </div>)
+        var jobdetails = this.props.jobdetails;
+        console.log("Inside JobDetail", jobdetails);
+        if (jobdetails) {
+            return(<span> 
+                   <h4 className="text-muted">{jobdetails.title}</h4>
+                   <div className="badge bg-primary">{jobdetails.status}</div>
+                   <p>
+                   {jobdetails.jd}
+                   </p>
+                   </span>);
         } else {
-            return(<div>
-                   Greetings
-                   </div>)
+            return(<span> Click on a job to see details </span>);
         }
     }
 }
 
 
-class JobItem extends React.Component {
-    fetchItem(e, job_id) {
-        axios.get("/jobs/"+job_id,   {headers: {'Accepts': 'application/json'}})
-        .then(function(resp) {
-                console.log(resp);
-        })
-        .catch(function(error) {
-            console.log(error);
-        })
-        e.preventDefault();
-    }
-
-    render() {
-        return (<a href={"/jobs/" + this.props.id} onClick={(e)=>this.fetchItem(e,this.props.id)}>{this.props.name}</a>);
-    }
-}
 
 
 class JobList extends React.Component {
@@ -74,15 +59,22 @@ class JobList extends React.Component {
                 console.log(error);
             })
          }
+    handleClick(e, job_id, callback) {
+        console.log("Inside handleClick!");
+        callback(job_id);
+        e.preventDefault();
+        }
     render() {
         var jobs = this.state.jobs;
-        console.log("Running ");
+        var callback = this.props.callback;
+        var handleClick = this.handleClick;
         if (jobs) {
             return (<ol>
                     {jobs.jobs.map(function(item) {
-                             return (<li key={item.id}> 
-                            <JobItem id={item.id} name={item.title}/>
-                            </li>)})}
+                        return (<li key={item.id}> 
+                                <a href={"/jobs/" + item.id} onClick={(e) => handleClick(e, item.id, callback)}>{item.title}</a>
+     
+                                </li>)})}
                     </ol>);
             } else {
                 return (<span> Loading... </span>);
@@ -90,26 +82,54 @@ class JobList extends React.Component {
     }
 }
 
-function JobInfo(props) {
-    var info = {jobs : []
-                current : null}
-    return (
-        <div>
-            <div className="col-3 sidebar">
-            <h2> Stats </h2>
-            <ul>
-            <li> Last crawled -  </li>
-            <li> Total jobs in system - </li>
-            </ul>
-            <JobList/>
-            </div>
+class JobInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {jobs: [],
+                      current: null};
+        this.updateCurrentJob = this.updateCurrentJob.bind(this);
+    }
+    updateCurrentJob(job_id) {
+        const jobs = this.state.jobs.slice();
+        axios.get("/jobs/"+job_id, 
+                  {headers: {'Accepts': 'application/json'}})
+            .then((resp) =>  {
+                console.log("Response ", resp);
+                this.setState({jobs: jobs,
+                               current : {title : resp.data.title,
+                                          company : resp.data.company,
+                                          status : resp.data.status,
+                                          jd : resp.data.jd}});
+            })
+            .catch(function(error) {
+                console.log("Error " , error);
+                this.setState({jobs: jobs,
+                               current : {title: "Error",
+                                          company: "Error",
+                                          status : "Error",
+                                          jd: "Error"}});
+            })
+        }
+    render() {
+        return (
+            <div className="row">
+                <div className="col-3 sidebar">
+                <h2> Stats </h2>
+                <ul>
+                <li> Last crawled -  </li>
+                <li> Total jobs in system - </li>
+                </ul>
+                <JobList callback={(job_id) => this.updateCurrentJob(job_id)}/>
+                </div>
 
-            <div className="col-7">
-            <JobDetail/>
-            </div>
-            </div>
+                <div className="col-7">
+                <JobDetail jobdetails={this.state.current}/>
+                </div>
+                </div>
 
-    )}
+        );
+    }
+}
 
 
 
